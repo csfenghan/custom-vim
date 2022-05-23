@@ -1,12 +1,25 @@
-""""""""""""""""""
-" 会话处理
-""""""""""""""""""
 
-autocmd VimEnter * :call slsession#SessionRestore()
-autocmd VimLeave * :call slsession#SessionSave()
+""""""""""""""""""
+" 会话保存
+""""""""""""""""""
+let g:mp_save_name = ".session.save"
 
+function custom#SessionSave() 
+    if isdirectory(".git") 
+        mksession! .session.vim
+    endif
+endfunction
+function custom#SessionRestore() 
+    let l:n = argc()
+    if n == 0 && isdirectory(".git") && filereadable(".session.vim") 
+        source .session.vim
+        echo "Restore state from last state"
+    endif
+endfunction
+
+""""""""""""""""""
 " 批量注释
-"""""""""""""""""""""""""""start
+""""""""""""""""""
 let g:CommentType = {
         \ "c":'//',
         \ "cc":'//',
@@ -14,6 +27,7 @@ let g:CommentType = {
         \ "py":'#',
         \ "vim":'"'
       \ }
+
 function Comment() 
     let l:nowType = &filetype
     if has_key(g:CommentType, l:nowType)
@@ -30,6 +44,4 @@ function UnComment()
     endif
 endfunction
 
-vnoremap <silent> <Leader>c :call Comment()<CR>
-vnoremap <silent> <Leader>u :call UnComment()<CR>
-"""""""""""""""""""""""""""end
+
