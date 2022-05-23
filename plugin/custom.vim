@@ -1,14 +1,18 @@
 """"""""""""""""""""""""""""
+" 全局变量配置
+""""""""""""""""""""""""""""
+let s:plugindir = expand('<sfile>:p:h:h')
+let g:configFilePath = ".workspace.vim"
+
+if filereadable(g:configFilePath)
+    execute "source ".g:configFilePath
+endif
+
+""""""""""""""""""""""""""""
 " 自动保存/恢复
 """"""""""""""""""""""""""""
 autocmd VimEnter * :call custom#SessionRestore()
 autocmd VimLeave * :call custom#SessionSave()
-
-""""""""""""""""""""""""""""
-" 批量注释
-""""""""""""""""""""""""""""
-vnoremap <silent> <Leader>c :call Comment()<CR>
-vnoremap <silent> <Leader>u :call UnComment()<CR>
 
 """"""""""""""""""""""""""""
 " coc配置
@@ -91,7 +95,7 @@ let g:Lf_GtagsAutoGenerate = 0
 let g:Lf_Gtagslabel = 'native-pygments'
 
 """"""""""""""""""""""""""""
-" coc-snippt
+" coc-snippet
 """"""""""""""""""""""""""""
 " Use <C-j> for select text for visual placeholder of snippet.
 vmap <C-j> <Plug>(coc-snippets-select)
@@ -126,11 +130,36 @@ let g:floaterm_height=0.7
 let g:floaterm_width=1.0
 
 " 基于floaterm实现的快速命令功能
-let g:quickRunCommand = ""
 let g:quickCompileCommand = ""
-function! QuickCommand(command, create)
+let g:quickRunCommand = ""
+
+function! QuickCommand(args, create)
+    " 是否创建配置文件
+    if filereadable(g:configFilePath)
+        execute "source ".g:configFilePath
+    endif
+    
+    " 选择
+    let l:command = ""
+    if a:args == "compile"
+        let command = g:quickCompileCommand 
+    elseif a:args == "run"
+        let command = g:quickRunCommand
+    endif
+
+    if (command == "") 
+        if filereadable(g:configFilePath)
+            execute "e ".g:configFilePath
+            return
+        endif
+        execute "!cp ".s:plugindir."/data/".g:configFilePath." ."
+        execute "e ".g:configFilePath
+        return
+    endif
+
+    " 运行
     let l:temp = @a
-    let @a = a:command
+    let @a = command
 
     if a:create
         FloatermToggle<CR>
@@ -142,9 +171,7 @@ function! QuickCommand(command, create)
 
     let @a = temp
 endfunction
-if filereadable("g:configFilePath")
-    execute "source ".g:configFilePath
-endif
+
 
 " 自动清除跳转记录
 autocmd VimEnter * :clearjumps
@@ -159,3 +186,8 @@ autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTr
 " Close the tab if NERDTree is the only window remaining in it.
 autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
 
+
+
+""""""""""""""""""""""""""""
+" vimspector配置
+""""""""""""""""""""""""""""
