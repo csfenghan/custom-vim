@@ -2,11 +2,8 @@
 " 全局变量配置
 """"""""""""""""""""""""""""
 let s:plugindir = expand('<sfile>:p:h:h')
-let g:configFilePath = ".workspace.vim"
-
-if filereadable(g:configFilePath)
-    execute "source ".g:configFilePath
-endif
+let s:config_file_name = "config.vim"
+let s:config_file_path = custom#projectConfigPath()."/".s:config_file_name
 
 """"""""""""""""""""""""""""
 " 自动保存/恢复
@@ -130,13 +127,16 @@ let g:floaterm_height=0.7
 let g:floaterm_width=1.0
 
 " 基于floaterm实现的快速命令功能
+
 let g:quickCompileCommand = ""
 let g:quickRunCommand = ""
 
 function! QuickCommand(args, create)
+    call custom#detectProjectDir()
+
     " 是否创建配置文件
-    if filereadable(g:configFilePath)
-        execute "source ".g:configFilePath
+    if filereadable(s:config_file_path)
+        execute "source ".s:config_file_path
     endif
     
     " 选择
@@ -148,12 +148,13 @@ function! QuickCommand(args, create)
     endif
 
     if (command == "") 
-        if filereadable(g:configFilePath)
-            execute "e ".g:configFilePath
+        if filereadable(s:config_file_path)
+            execute "e ".s:config_file_path
             return
         endif
-        execute "!cp ".s:plugindir."/data/".g:configFilePath." ."
-        execute "e ".g:configFilePath
+        execute "!cp ".s:plugindir."/data/".s:config_file_name." ".s:config_file_path
+        call feedkeys("\<CR>")
+        execute "e ".s:config_file_path
         return
     endif
 
@@ -191,3 +192,16 @@ autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTa
 """"""""""""""""""""""""""""
 " vimspector配置
 """"""""""""""""""""""""""""
+function custom#VimspectorContinue() 
+    call custom#detectProjectDir()
+
+    if !filereadable(s:config_file_path)
+        execute "!cp ".s:plugindir."/data/".s:config_file_name." ".s:config_file_path
+        call feedkeys("\<CR>")
+        execute "e ".s:config_file_path
+        return
+    endif
+    execute "source ".s:config_file_path
+    call feedkeys("\<Plug>VimspectorContinue")
+endfunction
+

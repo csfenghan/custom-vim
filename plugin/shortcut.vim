@@ -23,7 +23,7 @@ vmap <silent> ]c            :call Comment()<CR>
 vmap <silent> [c            :call UnComment()<CR>
 
 " 取消高亮
-nmap <silent> <A-q>         :noh
+nmap <silent> <A-q>         :noh<CR>
 """""""""""""""""""""""""""""""""
 " 文件管理与buffer管理
 """""""""""""""""""""""""""""""""
@@ -62,7 +62,7 @@ nmap <silent> <F3>          :call QuickCommand("run", 1)<CR>
 tmap <silent> <F3>          <C-\><C-n>:call QuickCommand("run", 0)<CR>
 
 " 调试命令
-nmap <silent> <F5>          <Plug>VimspectorContinue
+nmap <silent> <F5>          :call custom#VimspectorContinue()<CR>
 nmap <silent> <leader><F5>  <Plug>VimspectorRestart
 nmap <silent> <F6>          <Plug>VimspectorStop
 nmap <silent> <leader><F6>  <Plug>VimspectorPause

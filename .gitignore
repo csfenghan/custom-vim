@@ -1,1 +1,2 @@
-.session.vim
+.project/*
+.sessiom.vim
