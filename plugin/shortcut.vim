@@ -28,7 +28,7 @@ nmap <silent> <A-q>         :noh<CR>
 " 文件管理与buffer管理
 """""""""""""""""""""""""""""""""
 nmap <silent> <C-p>         :LeaderfFile<CR>
-nmap <silent> <C-m>         :LeaderfFunction<CR>
+nmap <silent> <A-m>         :LeaderfFunction<CR>
 nmap <silent> <C-g>         :LeaderfBufTag<CR>
 nmap <silent> <leader>b     :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
 nmap <silent> <leader>m     :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>

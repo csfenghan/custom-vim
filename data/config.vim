@@ -24,7 +24,7 @@ let g:vimspector_configurations = {
 \      "request": "launch",
 \      "program": "${workspaceRoot}/../demo.py",
 \      "args":["./demo"],
-\      "stopOnEntry": true,
+\      "stopOnEntry": v:true,
 \      "cwd": "${workspaceRoot}/.."
 \    }
 \  }
