@@ -11,7 +11,7 @@ nmap <silent> gr            <Plug>(coc-references)
 """""""""""""""""""""""""""""""""
 nmap <silent> [g            <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g            <Plug>(coc-diagnostic-next)
-nmap <silent> K             :call <SID>show_documentation()<CR>
+nmap <silent> K             :call Show_documentation()<CR>
 
 nmap <silent> gp            <Plug>(coc-git-prevchunk)
 nmap <silent> gn            <Plug>(coc-git-nextchunk)
@@ -22,6 +22,13 @@ nmap <silent> cn            <Plug>(coc-git-nextconflict)
 vmap <silent> ]c            :call Comment()<CR>
 vmap <silent> [c            :call UnComment()<CR>
 
+" 全局复制(将寄存器"0中的数据复制到系统粘贴板)
+nmap <silent> cc            :call custom#VimGlobalClipboard()<CR>
+
+" 保存
+nmap <silent> <C-s>         :w<CR>
+imap <silent> <C-s>         <ESC>:w<CR>a
+
 " 取消高亮
 nmap <silent> <A-q>         :noh<CR>
 """""""""""""""""""""""""""""""""
@@ -30,7 +37,7 @@ nmap <silent> <A-q>         :noh<CR>
 nmap <silent> <C-p>         :LeaderfFile<CR>
 nmap <silent> <A-m>         :LeaderfFunction<CR>
 nmap <silent> <C-g>         :LeaderfBufTag<CR>
-nmap <silent> <leader>b     :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
+nmap <silent> <A-b>         :<C-U><C-R>=printf("Leaderf buffer %s", "")<CR><CR>
 nmap <silent> <leader>m     :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
 
 " buffer显示

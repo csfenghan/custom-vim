@@ -5,6 +5,11 @@ let s:plugindir = expand('<sfile>:p:h:h')
 let s:config_file_name = "config.vim"
 let s:config_file_path = custom#projectConfigPath()."/".s:config_file_name
 
+if filereadable(s:config_file_path)
+    execute "source ".s:config_file_path
+endif
+
+
 """"""""""""""""""""""""""""
 " 自动命令
 """"""""""""""""""""""""""""
@@ -44,7 +49,7 @@ endfunction
 " format on enter, <cr> could be remapped by other vim plugin
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-function! s:show_documentation()
+function! g:Show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
   elseif (coc#rpc#ready())
@@ -262,3 +267,28 @@ require('bufferline').setup {
   }
 }
 EOF
+
+
+""""""""""""""""""""""""""""
+" 全局复制
+""""""""""""""""""""""""""""
+py3 import subprocess
+
+function custom#VimGlobalClipboard() 
+if !has("python3") 
+    echo "Vim Glbal Clipboard need Python3!"
+    return
+endif
+if $WSL_DISTRO_NAME == ""
+    echo "Only support WSL!"
+    return
+endif
+
+python3 << EOF
+data = vim.eval("@0")
+p = subprocess.Popen(['clip.exe'], stdin=subprocess.PIPE)
+p.communicate(input=data.encode())
+EOF
+echo "Copy data to system clipboard"
+endfunction
+
