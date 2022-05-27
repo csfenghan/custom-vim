@@ -1,21 +1,7 @@
 """"""""""""""""""
-" 自动创建工程目录
-""""""""""""""""""
-let g:projectConfigPath = ".project"
-function custom#projectConfigPath()
-    return g:projectConfigPath
-endfunction
-
-function custom#detectProjectDir() 
-    if !isdirectory(g:projectConfigPath)
-        execute "!mkdir ".g:projectConfigPath
-    endif
-endfunction
-""""""""""""""""""
 " 会话保存
 """"""""""""""""""
-let s:session_name = ".session.vim"
-let s:session_path = g:projectConfigPath."/".s:session_name
+let s:session_path = ".session.vim"
 
 function custom#SessionSave() 
     call custom#detectProjectDir()
@@ -44,7 +30,7 @@ let g:CommentType = {
         \ "make":   "#"
       \ }
 
-function Comment() 
+function custom#Comment() 
     let l:nowType = &filetype
     if has_key(g:CommentType, l:nowType)
         execute "s,^,".g:CommentType[l:nowType].",gg"
@@ -52,7 +38,7 @@ function Comment()
     endif
 endfunction
 
-function UnComment() 
+function custom#UnComment() 
     let l:nowType = &filetype
     if has_key(g:CommentType, l:nowType)
         execute "s,^".g:CommentType[l:nowType].",,gg"
@@ -60,4 +46,27 @@ function UnComment()
     endif
 endfunction
 
+
+""""""""""""""""""""""""""""
+" 全局复制
+""""""""""""""""""""""""""""
+py3 import subprocess
+
+function custom#VimGlobalClipboard() 
+if !has("python3") 
+    echo "Vim Glbal Clipboard need Python3!"
+    return
+endif
+if $WSL_DISTRO_NAME == ""
+    echo "Only support WSL!"
+    return
+endif
+
+python3 << EOF
+data = vim.eval("@0")
+p = subprocess.Popen(['clip.exe'], stdin=subprocess.PIPE)
+p.communicate(input=data.encode())
+EOF
+echo "Copy data to system clipboard"
+endfunction
 
