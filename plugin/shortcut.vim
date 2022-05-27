@@ -44,7 +44,7 @@ nmap <silent> <leader>m     :<C-U><C-R>=printf("Leaderf mru %s", "")<CR><CR>
 nmap <silent> <A-l>         :bn<CR>
 imap <silent> <A-l>         <ESC>:bn<CR>
 nmap <silent> <A-h>         :bp<CR>
-imap <silent> <A-h>         :<ESC>bp<CR>
+imap <silent> <A-h>         <ESC>:bp<CR>
 nmap <silent> <A-k>         :bd<CR>
 
 " 文件树

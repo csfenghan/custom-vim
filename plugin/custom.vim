@@ -8,6 +8,9 @@ let s:config_file_path = custom#projectConfigPath()."/".s:config_file_name
 if filereadable(s:config_file_path)
     execute "source ".s:config_file_path
 endif
+if filereadable(".workspace.vim")
+    execute "source .workspace.vim"
+endif
 
 
 """"""""""""""""""""""""""""
@@ -212,8 +215,14 @@ endfunction
 """"""""""""""""""""""""""""
 lua << EOF
 require('bufferline').setup {
+  highlights = {
+    buffer_selected = {
+      gui="italic" 
+    }        
+  },
   options = {
     mode = "buffers", -- set to "tabs" to only show tabpages instead
+    numbers = "none" ,
     close_command = "bdelete! %d",       -- can be a string | function, see "Mouse actions"
     right_mouse_command = "bdelete! %d", -- can be a string | function, see "Mouse actions"
     left_mouse_command = "buffer %d",    -- can be a string | function, see "Mouse actions"
@@ -221,7 +230,7 @@ require('bufferline').setup {
     -- NOTE: this plugin is designed with this icon in mind,
     -- and so changing this is NOT recommended, this is intended
     -- as an escape hatch for people who cannot bear it for whatever reason
-    indicator_icon = '▌',
+    indicator_icon = '▎',
     buffer_close_icon = '',
     modified_icon = '●',
     close_icon = '',
@@ -240,6 +249,7 @@ require('bufferline').setup {
     max_name_length = 18,
     max_prefix_length = 15, -- prefix used when a buffer is de-duplicated
     tab_size = 18,
+    diagnostics = false,
     diagnostics_update_in_insert = false,
     diagnostics_indicator = function(count, level, diagnostics_dict, context)
       return "("..count..")"
@@ -264,8 +274,25 @@ require('bufferline').setup {
         return true
       end
     end,
+    --offsets = {{filetype = "NvimTree", text = "File Explorer" | function , text_align = "left" | "center" | "right"}},
+    color_icons = false, -- whether or not to add the filetype icon highlights
+    show_buffer_icons = false, -- disable filetype icons for buffers
+    show_buffer_close_icons = false,
+    show_buffer_default_icon = false, -- whether or not an unrecognised filetype should show a default icon
+    show_close_icon = false,
+    show_tab_indicators = false,
+    persist_buffer_sort = false, -- whether or not custom sorted buffers should persist
+    -- can also be a table containing 2 custom separators
+    -- [focused and unfocused]. eg: { '|', '|' }
+    separator_style = "slant" ,--| "thick" | "thin" | { 'any', 'any' },
+    enforce_regular_tabs = true,
+    always_show_bufferline = true,
+    --sort_by = 'insert_after_current' 
+      -- add custom logic
+      --return buffer_a.modified > buffer_b.modified
   }
 }
+
 EOF
 
 
