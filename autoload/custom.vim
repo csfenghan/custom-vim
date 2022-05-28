@@ -1,19 +1,23 @@
 """"""""""""""""""
 " 会话保存
 """"""""""""""""""
-let s:session_path = ".session.vim"
+let g:customAutoSave =  get(g:, "customAutoSave",v:false)
+let g:session_path =  get(g:, "session_path","session.vim")
 
 function custom#SessionSave() 
-    call custom#detectProjectDir()
-    if isdirectory(".git") 
-        execute "mksession! ".s:session_path
+    if g:customAutoSave
+        execute "mksession! ".g:session_path
     endif
 endfunction
 
 function custom#SessionRestore() 
+    if !g:customAutoSave
+        return
+    endif
+
     let l:n = argc()
-    if n == 0 && isdirectory(".git") && filereadable(s:session_path) 
-        execute "source ".s:session_path
+    if n == 0 && filereadable(g:session_path) 
+        execute "source ".g:session_path
         echo "Restore state from last state"
     endif
 endfunction
