@@ -26,12 +26,11 @@ endfunction
 " 批量注释
 """"""""""""""""""
 let g:CommentType = {
-        \ "c"   :   '//',
-        \ "cc"  :   '//',
-        \ "cpp" :   '//',
-        \ "py"  :   '#',
-        \ "vim" :   '"',
-        \ "make":   "#"
+        \ "c"       :   '//',
+        \ "cpp"     :   '//',
+        \ "python"  :   '#',
+        \ "vim"     :   '"',
+        \ "make"    :   "#"
       \ }
 
 function custom#Comment() 
